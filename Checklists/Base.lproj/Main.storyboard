@@ -45,10 +45,10 @@
             </objects>
             <point key="canvasLocation" x="975" y="-138"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Add Item View Controller-->
         <scene sceneID="VAO-tB-U1v">
             <objects>
-                <tableViewController id="ljE-aY-2XI" sceneMemberID="viewController">
+                <tableViewController id="ljE-aY-2XI" customClass="AddItemViewController" customModule="Checklists" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Tdz-No-XQJ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
