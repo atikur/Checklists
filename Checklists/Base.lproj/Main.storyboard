@@ -32,6 +32,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="efR-iY-Fac" kind="presentation" identifier="EditItem" trigger="accessoryAction" id="UuU-BH-NP3"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -93,7 +96,7 @@
                                 <action selector="cancelButtonPressed:" destination="ljE-aY-2XI" id="IeU-cb-e8F"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="tEk-SW-OwM">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="done" id="tEk-SW-OwM">
                             <connections>
                                 <action selector="doneButtonPressed:" destination="ljE-aY-2XI" id="0iy-Pt-mnV"/>
                             </connections>
@@ -145,4 +148,7 @@
             <point key="canvasLocation" x="1617" y="132"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="UuU-BH-NP3"/>
+    </inferredMetricsTieBreakers>
 </document>

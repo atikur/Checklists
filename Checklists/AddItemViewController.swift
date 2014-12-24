@@ -11,6 +11,7 @@ import UIKit
 protocol AddItemViewControllerDelegate: class {
     func addItemViewControllerDidCancel(controller: AddItemViewController)
     func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem)
+    func addItemViewController(controller: AddItemViewController, didFinishEditingItem item: ChecklistItem)
 }
 
 class AddItemViewController: UITableViewController, UITextFieldDelegate {
@@ -20,11 +21,18 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
     
     weak var delegate: AddItemViewControllerDelegate?
     
+    var itemToEdit: ChecklistItem?
+    
     @IBAction func doneButtonPressed(sender: AnyObject) {
-        let item = ChecklistItem()
-        item.text = textField.text
+        if let item = itemToEdit {
+            item.text = textField.text
+            delegate?.addItemViewController(self, didFinishEditingItem: item)
+        } else {
+            let item = ChecklistItem()
+            item.text = textField.text
         
-       delegate?.addItemViewController(self, didFinishAddingItem: item)
+            delegate?.addItemViewController(self, didFinishAddingItem: item)
+        }
     }
     
     @IBAction func cancelButtonPressed(sender: UIBarButtonItem) {
@@ -35,11 +43,19 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
         return nil
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if let item = itemToEdit {
+            title = "Edit Item"
+            textField.text = item.text
+            doneBarButton.enabled = true
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         textField.becomeFirstResponder()
-        
-        doneBarButton.enabled = false
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
