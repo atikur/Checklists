@@ -54,10 +54,10 @@
             </objects>
             <point key="canvasLocation" x="931" y="102"/>
         </scene>
-        <!--Add Item View Controller-->
+        <!--Item Detail View Controller-->
         <scene sceneID="VAO-tB-U1v">
             <objects>
-                <tableViewController id="ljE-aY-2XI" customClass="AddItemViewController" customModule="Checklists" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="ljE-aY-2XI" customClass="ItemDetailViewController" customModule="Checklists" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Tdz-No-XQJ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

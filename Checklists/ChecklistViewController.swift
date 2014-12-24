@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChecklistViewController: UITableViewController, AddItemViewControllerDelegate {
+class ChecklistViewController: UITableViewController, ItemDetailViewControllerDelegate {
     
     var checklistItems: [ChecklistItem] = []
     
@@ -90,11 +90,11 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
         checklistItems.append(item5)
     }
     
-    func addItemViewControllerDidCancel(controller: AddItemViewController) {
+    func itemDetailViewControllerDidCancel(controller: ItemDetailViewController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem) {
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishAddingItem item: ChecklistItem) {
         
         let newRowIndex = checklistItems.count
         checklistItems.append(item)
@@ -106,7 +106,7 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func addItemViewController(controller: AddItemViewController, didFinishEditingItem item: ChecklistItem) {
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
         if let index = find(checklistItems, item) {
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
             if let cell = tableView.cellForRowAtIndexPath(indexPath) {
@@ -119,11 +119,11 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AddItem" {
             let navigationController = segue.destinationViewController as UINavigationController
-            let controller = navigationController.topViewController as AddItemViewController
+            let controller = navigationController.topViewController as ItemDetailViewController
             controller.delegate = self
         } else if segue.identifier == "EditItem" {
             let navigationController = segue.destinationViewController as UINavigationController
-            let controller = navigationController.topViewController as AddItemViewController
+            let controller = navigationController.topViewController as ItemDetailViewController
             controller.delegate = self
             
             if let indexPath = tableView.indexPathForCell(sender as UITableViewCell) {
