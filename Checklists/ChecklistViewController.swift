@@ -8,25 +8,15 @@
 
 import UIKit
 
-class ChecklistViewController: UITableViewController {
+class ChecklistViewController: UITableViewController, AddItemViewControllerDelegate {
     
     var checklistItems: [ChecklistItem] = []
-
-    @IBAction func addItem(sender: UIBarButtonItem) {
-        let rowCount = checklistItems.count
-        
-        let item = ChecklistItem()
-        item.text = "I am a new item"
-        checklistItems.append(item)
-        
-        let indexPath = NSIndexPath(forRow: rowCount, inSection: 0)
-        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         addChecklistItems()
+        
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,6 +87,30 @@ class ChecklistViewController: UITableViewController {
         let item5 = ChecklistItem()
         item5.text = "Have a walk"
         checklistItems.append(item5)
+    }
+    
+    func addItemViewControllerDidCancel(controller: AddItemViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem) {
+        
+        let newRowIndex = checklistItems.count
+        checklistItems.append(item)
+        
+        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
+        
+        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "AddItem" {
+            let navigationController = segue.destinationViewController as UINavigationController
+            let controller = navigationController.topViewController as AddItemViewController
+            controller.delegate = self
+        }
     }
 }
 
