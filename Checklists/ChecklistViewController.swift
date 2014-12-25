@@ -12,46 +12,20 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
     
     var checklistItems: [ChecklistItem] = []
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        addChecklistItems()
+    // MARK: -
+    // MARK: Data persistent methods
+    
+    // save checklist items to plist file
+    func saveChecklistItems() {
+        let data = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
+        archiver.encodeObject(checklistItems, forKey: "ChecklistItems")
+        archiver.finishEncoding()
+        data.writeToFile(dataFilePath(), atomically: true)
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return checklistItems.count
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as UITableViewCell
-        let item = checklistItems[indexPath.row]
-
-        configureTextLabelForCell(cell, withChecklistItem: item)
-        configureCheckmarkForCell(cell, withChecklistItem: item)
-        
-        return cell
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-            let item = checklistItems[indexPath.row]
-            item.toggleChecked()
-            
-            configureCheckmarkForCell(cell, withChecklistItem: item)
-        }
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        saveChecklistItems()
-    }
-    
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        checklistItems.removeAtIndex(indexPath.row)
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
+    // MARK: -
+    // MARK: ItemDetailViewControllerDelegate methods
     
     func itemDetailViewControllerDidCancel(controller: ItemDetailViewController) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -83,6 +57,44 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         saveChecklistItems()
     }
     
+    // MARK: -
+    // MARK: TableView data source and delegate methods
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return checklistItems.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as UITableViewCell
+        let item = checklistItems[indexPath.row]
+        
+        configureTextLabelForCell(cell, withChecklistItem: item)
+        configureCheckmarkForCell(cell, withChecklistItem: item)
+        
+        return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            let item = checklistItems[indexPath.row]
+            item.toggleChecked()
+            
+            configureCheckmarkForCell(cell, withChecklistItem: item)
+        }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        saveChecklistItems()
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        checklistItems.removeAtIndex(indexPath.row)
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        
+        saveChecklistItems()
+    }
+    
+    // MARK: -
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AddItem" {
             let navigationController = segue.destinationViewController as UINavigationController
@@ -99,24 +111,12 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         }
     }
     
-    func documentsDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) as [String]
-        return paths[0]
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
     
-    func dataFilePath() -> String {
-        return documentsDirectory().stringByAppendingPathComponent("Checklists.plist")
-    }
-    
-    func saveChecklistItems() {
-        let data = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
-        archiver.encodeObject(checklistItems, forKey: "ChecklistItems")
-        archiver.finishEncoding()
-        data.writeToFile(dataFilePath(), atomically: true)
-    }
-    
-    // helper methods
+    // MARK: -
+    // MARK: Helper methods
     
     private func configureCheckmarkForCell(cell: UITableViewCell, withChecklistItem item: ChecklistItem) {
         let label = cell.viewWithTag(1001) as UILabel
@@ -132,26 +132,15 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         label.text = item.text
     }
     
-    private func addChecklistItems() {
-        let item1 = ChecklistItem()
-        item1.text = "Wake up"
-        checklistItems.append(item1)
-        
-        let item2 = ChecklistItem()
-        item2.text = "Have breakfast"
-        checklistItems.append(item2)
-        
-        let item3 = ChecklistItem()
-        item3.text = "Learn iOS development"
-        checklistItems.append(item3)
-        
-        let item4 = ChecklistItem()
-        item4.text = "Read newspaper"
-        checklistItems.append(item4)
-        
-        let item5 = ChecklistItem()
-        item5.text = "Have a walk"
-        checklistItems.append(item5)
+    // return path of documents directory
+    private func documentsDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) as [String]
+        return paths[0]
+    }
+    
+    // return file path where data will be stored
+    private func dataFilePath() -> String {
+        return documentsDirectory().stringByAppendingPathComponent("Checklists.plist")
     }
 }
 
