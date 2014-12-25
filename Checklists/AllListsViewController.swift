@@ -45,6 +45,17 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
     
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        let navigationController = storyboard?.instantiateViewControllerWithIdentifier("ListNavigationController") as UINavigationController
+        let controller = navigationController.topViewController as ListDetailViewController
+        controller.delegate = self
+        
+        let checklist = lists[indexPath.row]
+        controller.checklistToEdit = checklist
+        
+        presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
     // MARK: -
     // MARK: ListDetailViewControllerDelegate methods
     
@@ -64,6 +75,14 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
     
     func listDetailViewController(controller: ListDetailViewController, didFinishEditingChecklist checklist: Checklist) {
+        if let index = find(lists, checklist) {
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                cell.textLabel?.text = checklist.name
+            }
+        }
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
 
