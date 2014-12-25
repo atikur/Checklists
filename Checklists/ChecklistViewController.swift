@@ -16,7 +16,6 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         super.viewDidLoad()
         
         addChecklistItems()
-        
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -41,6 +40,8 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
             configureCheckmarkForCell(cell, withChecklistItem: item)
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        saveChecklistItems()
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -50,6 +51,69 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func itemDetailViewControllerDidCancel(controller: ItemDetailViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishAddingItem item: ChecklistItem) {
+        
+        let newRowIndex = checklistItems.count
+        checklistItems.append(item)
+        
+        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
+        
+        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+        saveChecklistItems()
+    }
+    
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
+        if let index = find(checklistItems, item) {
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                configureTextLabelForCell(cell, withChecklistItem: item)
+            }
+        }
+        dismissViewControllerAnimated(true, completion: nil)
+        
+        saveChecklistItems()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "AddItem" {
+            let navigationController = segue.destinationViewController as UINavigationController
+            let controller = navigationController.topViewController as ItemDetailViewController
+            controller.delegate = self
+        } else if segue.identifier == "EditItem" {
+            let navigationController = segue.destinationViewController as UINavigationController
+            let controller = navigationController.topViewController as ItemDetailViewController
+            controller.delegate = self
+            
+            if let indexPath = tableView.indexPathForCell(sender as UITableViewCell) {
+                controller.itemToEdit = checklistItems[indexPath.row]
+            }
+        }
+    }
+    
+    func documentsDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) as [String]
+        return paths[0]
+    }
+    
+    func dataFilePath() -> String {
+        return documentsDirectory().stringByAppendingPathComponent("Checklists.plist")
+    }
+    
+    func saveChecklistItems() {
+        let data = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
+        archiver.encodeObject(checklistItems, forKey: "ChecklistItems")
+        archiver.finishEncoding()
+        data.writeToFile(dataFilePath(), atomically: true)
     }
     
     // helper methods
@@ -88,48 +152,6 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         let item5 = ChecklistItem()
         item5.text = "Have a walk"
         checklistItems.append(item5)
-    }
-    
-    func itemDetailViewControllerDidCancel(controller: ItemDetailViewController) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func itemDetailViewController(controller: ItemDetailViewController, didFinishAddingItem item: ChecklistItem) {
-        
-        let newRowIndex = checklistItems.count
-        checklistItems.append(item)
-        
-        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
-        
-        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-        
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func itemDetailViewController(controller: ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
-        if let index = find(checklistItems, item) {
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-                configureTextLabelForCell(cell, withChecklistItem: item)
-            }
-        }
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "AddItem" {
-            let navigationController = segue.destinationViewController as UINavigationController
-            let controller = navigationController.topViewController as ItemDetailViewController
-            controller.delegate = self
-        } else if segue.identifier == "EditItem" {
-            let navigationController = segue.destinationViewController as UINavigationController
-            let controller = navigationController.topViewController as ItemDetailViewController
-            controller.delegate = self
-            
-            if let indexPath = tableView.indexPathForCell(sender as UITableViewCell) {
-                controller.itemToEdit = checklistItems[indexPath.row]
-            }
-        }
     }
 }
 
