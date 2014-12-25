@@ -10,10 +10,21 @@ import UIKit
 
 class ChecklistViewController: UITableViewController, ItemDetailViewControllerDelegate {
     
-    var checklistItems: [ChecklistItem] = []
+    var checklistItems: [ChecklistItem]
     
     // MARK: -
     // MARK: Data persistent methods
+    
+    // load checklist items from plist file
+    func loadChecklistItems() {
+        let path = dataFilePath()
+        if NSFileManager.defaultManager().fileExistsAtPath(path) {
+            let data = NSData(contentsOfFile: path)
+            let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
+            checklistItems = unarchiver.decodeObjectForKey("ChecklistItems") as [ChecklistItem]
+            unarchiver.finishDecoding()
+        }
+    }
     
     // save checklist items to plist file
     func saveChecklistItems() {
@@ -94,6 +105,13 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
     }
     
     // MARK: -
+    
+    required init(coder aDecoder: NSCoder) {
+        checklistItems = [ChecklistItem]()
+        super.init(coder: aDecoder)
+        
+        loadChecklistItems()
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AddItem" {
