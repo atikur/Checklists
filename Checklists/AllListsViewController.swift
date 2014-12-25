@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllListsViewController: UITableViewController {
+class AllListsViewController: UITableViewController, ListDetailViewControllerDelegate {
     
     var lists: [Checklist]
     
@@ -36,6 +36,21 @@ class AllListsViewController: UITableViewController {
         let checklist = lists[indexPath.row]
         performSegueWithIdentifier("ShowChecklist", sender: checklist)
     }
+    
+    // MARK: -
+    // MARK: ListDetailViewControllerDelegate methods
+    
+    func listDetailViewControllerDidCancel(controller: ListDetailViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func listDetailViewController(controller: ListDetailViewController, didFinishAddingChecklist checklist: Checklist) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func listDetailViewController(controller: ListDetailViewController, didFinishEditingChecklist checklist: Checklist) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +77,11 @@ class AllListsViewController: UITableViewController {
         if segue.identifier == "ShowChecklist" {
             let controller = segue.destinationViewController as ChecklistViewController
             controller.checklist = sender as Checklist
+        } else if segue.identifier == "AddChecklist" {
+            let navigationController = segue.destinationViewController as UINavigationController
+            let controller = navigationController.topViewController as ListDetailViewController
+            controller.delegate = self
+            controller.checklistToEdit = nil
         }
     }
 
