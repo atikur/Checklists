@@ -12,6 +12,9 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
     var lists: [Checklist]
     
+    // MARK: -
+    // MARK: TableView data source and delegate methods
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lists.count
     }
@@ -35,6 +38,11 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let checklist = lists[indexPath.row]
         performSegueWithIdentifier("ShowChecklist", sender: checklist)
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        lists.removeAtIndex(indexPath.row)
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
     
     // MARK: -
