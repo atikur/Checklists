@@ -11,6 +11,7 @@ import UIKit
 class ChecklistViewController: UITableViewController, ItemDetailViewControllerDelegate {
     
     var checklistItems: [ChecklistItem]
+    var checklist: Checklist!
     
     // MARK: -
     // MARK: Data persistent methods
@@ -105,6 +106,12 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
     }
     
     // MARK: -
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        title = checklist.name
+    }
     
     required init(coder aDecoder: NSCoder) {
         checklistItems = [ChecklistItem]()
