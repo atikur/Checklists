@@ -45,6 +45,13 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
     
     func listDetailViewController(controller: ListDetailViewController, didFinishAddingChecklist checklist: Checklist) {
+        let newRowIndex = lists.count
+        lists.append(checklist)
+        
+        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
+        
+        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     
