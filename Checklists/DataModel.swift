@@ -13,6 +13,7 @@ class DataModel {
     
     init() {
         loadChecklists()
+        registerDefaults()
     }
     
     func saveChecklists() {
@@ -41,4 +42,11 @@ class DataModel {
     func dataFilePath() -> String {
         return documentsDirectory().stringByAppendingPathComponent("Checklists.plist")
     }
+    
+    func registerDefaults() {
+        let dictionary = ["ChecklistIndex": -1]
+        
+        NSUserDefaults.standardUserDefaults().registerDefaults(dictionary)
+    }
+    
 }
