@@ -321,4 +321,5 @@
     <inferredMetricsTieBreakers>
         <segue reference="UuU-BH-NP3"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.01411382299270073" green="0.66323562956204385" blue="0.92033531021897808" alpha="1" colorSpace="calibratedRGB"/>
 </document>
