@@ -12,6 +12,18 @@ class Checklist: NSObject, NSCoding {
     var name: String = ""
     var items: [ChecklistItem] = []
     
+    func countUncheckedItems() -> Int {
+        var count = 0
+        
+        for item in items {
+            if !item.checked {
+                count++
+            }
+        }
+        
+        return count
+    }
+    
     init(name: String) {
         self.name = name
         super.init()

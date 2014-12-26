@@ -25,12 +25,18 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as? UITableViewCell
         
         if cell == nil {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+            cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: cellIdentifier)
         }
         
         let checklist = dataModel.lists[indexPath.row]
         cell.textLabel?.text = checklist.name
         cell.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton
+        
+        if checklist.items.isEmpty {
+            cell.detailTextLabel?.text = "(No Items)"
+        } else {
+            cell.detailTextLabel?.text = checklist.countUncheckedItems() > 0 ? "\(checklist.countUncheckedItems()) Remaining" : "All Done!"
+        }
         
         return cell
     }
@@ -92,6 +98,11 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         if viewController === self {
             dataModel.indexOfSelectedChecklist = -1
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
 
     override func viewDidLoad() {
