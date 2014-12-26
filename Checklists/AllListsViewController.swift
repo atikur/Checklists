@@ -86,11 +86,16 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // MARK: -
+    // MARK: UINavigationControllerDelegate methods
+    
     func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         if viewController === self {
             dataModel.indexOfSelectedChecklist = -1
         }
     }
+    
+    // MARK: -
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)

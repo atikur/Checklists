@@ -58,6 +58,9 @@ class ListDetailViewController: UITableViewController, UITextFieldDelegate, Icon
         textField.becomeFirstResponder()
     }
     
+    // MARK: -
+    // MARK: TableView data source and delegate methods
+    
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         if indexPath.section == 1 {
             return indexPath
@@ -73,11 +76,16 @@ class ListDetailViewController: UITableViewController, UITextFieldDelegate, Icon
         return true
     }
     
+    // MARK: -
+    // MARK: IconPickerViewControllerDelegate methods
+    
     func iconPicker(picker: IconPickerViewController, didPickIcon iconName: String) {
         self.iconName = iconName
         iconImageView.image = UIImage(named: iconName)
         navigationController?.popViewControllerAnimated(true)
     }
+    
+    // MARK: -
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "PickIcon" {
