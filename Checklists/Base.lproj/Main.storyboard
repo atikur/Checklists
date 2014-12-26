@@ -218,10 +218,19 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z5S-VL-7H9">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z5S-VL-7H9">
                                                     <rect key="frame" x="497" y="4" width="36" height="36"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="36" id="Vhn-vS-YWl"/>
+                                                        <constraint firstAttribute="width" constant="36" id="yfb-7g-ep4"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="z5S-VL-7H9" secondAttribute="trailing" id="SWP-5e-nvB"/>
+                                                <constraint firstItem="z5S-VL-7H9" firstAttribute="top" secondItem="aft-3e-gLY" secondAttribute="top" constant="4" id="WBi-v0-gSu"/>
+                                                <constraint firstAttribute="bottom" secondItem="z5S-VL-7H9" secondAttribute="bottom" constant="3.5" id="edh-BK-dGe"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="Tgg-Qn-qjX" kind="show" identifier="PickIcon" id="yMh-aF-hUH"/>
